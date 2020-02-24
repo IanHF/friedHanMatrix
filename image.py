@@ -138,6 +138,10 @@ def add_line(g, startx, starty, endx, endy):
 #NEW MATRIX CODE BELOW
 example_matrix = [[25, 25, 0, 1], [50, 50, 0, 1], [25, 50, 0, 1], [50, 25, 0, 1]]
 
+def display_matrix(x):
+    for i in x:
+        print(i)
+
 def multiply_matrices(x,y):
 #this function is meant to take in rectangular matrices and multiply them in order given
     result = [len(y)][len(y[0])]
@@ -145,8 +149,7 @@ def multiply_matrices(x,y):
         for j in range(len(y[0])):
             for k in range(len(y)):
                 result_matrix[i][j] += x[i][k] * y[k][j]
-    for r in result_matrix:
-        print(r)
+    display_matrix(result_matrix)
     return result_matrix
 
 #TEST CODE BELOW
