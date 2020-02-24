@@ -1,14 +1,18 @@
-four_identity = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]
+#SPECIAL THANKS TO IAN WILLIAMS FOR HELPING ME WITH SOME DEBUGGING, PRAISE PROGRAMMER JESUS, PEACE BE UPON HIM
 
 class picture:
     def __init__(self, n, w, h):
         self.name = n
         self.width, self.height = (w, h)
         self.pixels = [[[255, 255, 255] for i in range(self.width)] for j in range(self.height)]
+        self.four_identity = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]
+        self.edge_matrix = [[], [], [], []]
+
     def plot(self, x, y, color):
         if x < 0 or y < 0 or x >= self.width or y >= self.height:#out of bounds
             return
         self.pixels[self.height - y - 1][x] = color #Flip for humans
+
     def draw_line(self, x0, y0, x1, y1, color ):#DW's code
         #swap points if going right -> left
         if x0 > x1:
@@ -90,6 +94,25 @@ class picture:
                 #end octant 7 while
                 self.plot(x1, y1, color)
 
+    def display_edge_matrix(self):
+        for i in self.edge_matrix:
+            print(i)
+
+    def add_3d_point(self, x, y, z):
+        self.edge_matrix[0].append(x)
+        self.edge_matrix[1].append(y)
+        self.edge_matrix[2].append(z)
+        self.edge_matrix[3].append(1)
+
+    def add_edge(self, x0, y0, z0, x1, y1, z1):
+        self.add_3d_point(x0,y0,z0)
+        self.add_3d_point(x1,y1,z1)
+
+    def draw_edges(self, color):
+        iterator = 0
+        while (iterator != (len(self.edge_matrix[0]) - 1)):
+            self.draw_line(self.edge_matrix[0][iterator], self.edge_matrix[1][iterator], self.edge_matrix[0][iterator + 1], self.edge_matrix[1][iterator + 1], color)
+            iterator = iterator + 2
 
 def coolify_pic_ascii(g):
     a = 1
@@ -154,19 +177,25 @@ def multiply_matrices(x,y):
 
 #TEST CODE BELOW
 
-# n = picture('image', 500, 500)
-#
-# n.draw_line(50, 220, 241, 300, [100, 100, 0])
-# n.draw_line(220, 50, 300, 241, [0, 100, 100])
-# n.draw_line(241, 220, 50, 300, [100, 0, 100])
-# n.draw_line(300, 50, 220, 241, [0, 1000, 0])
-# n.draw_line(0, 0, 400, 400, [50, 0, 0])
-# n.draw_line(500, 0, 0, 500, [0, 50, 0])
-# n.draw_line(0, 500, 500, 0, [0, 0, 50])
-# n.draw_line(500, 500, 0, 0, [0, 50, 50])
-# n.draw_line(50, 50, 250, 50, [50, 0, 50])
-# n.draw_line(50, 250, 50, 50, [50, 50, 0])
-#
-# ppm_save_ascii(n)
+#draw_line(self, x0, y0, x1, y1, color )
+#add_edge(self, x0, y0, z0, x1, y1, z1)
+#draw_edges(self, color)
+
+n = picture('image', 500, 500)
+
+n.add_edge(50, 220, 0, 241, 300, 0)
+n.add_edge(220, 50, 0, 300, 241, 0)
+n.add_edge(241, 220, 0, 50, 300, 0)
+n.add_edge(300, 50, 0, 220, 241, 0)
+n.add_edge(0, 0, 0, 400, 400, 0)
+n.add_edge(500, 0, 0, 0, 500, 0)
+n.add_edge(0, 500, 0, 500, 0, 0)
+n.add_edge(500, 500, 0, 0, 0, 0)
+n.add_edge(50, 50, 0, 250, 50, 0)
+n.add_edge(50, 250, 0, 50, 50, 0)
+
+n.draw_edges([100, 100, 100])
+
+ppm_save_ascii(n)
 
 multiply_matrices(four_identity, example_matrix)
