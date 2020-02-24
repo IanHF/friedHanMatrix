@@ -1,4 +1,5 @@
 #SPECIAL THANKS TO IAN WILLIAMS FOR HELPING ME WITH SOME DEBUGGING, PRAISE PROGRAMMER JESUS, PEACE BE UPON HIM
+#<3 IW
 
 class picture:
     def __init__(self, n, w, h):
@@ -13,7 +14,7 @@ class picture:
             return
         self.pixels[self.height - y - 1][x] = color #Flip for humans
 
-    def draw_line(self, x0, y0, x1, y1, color ):#DW's code
+    def draw_line(self, x0, y0, x1, y1, color ):
         #swap points if going right -> left
         if x0 > x1:
             xt = x0
@@ -93,7 +94,7 @@ class picture:
                     d-= B
                 #end octant 7 while
                 self.plot(x1, y1, color)
-
+                
     def display_edge_matrix(self):
         for i in self.edge_matrix:
             print(i)
@@ -110,7 +111,9 @@ class picture:
 
     def draw_edges(self, color):
         iterator = 0
-        while (iterator != (len(self.edge_matrix[0]) - 1)):
+        self.display_edge_matrix()
+        while (iterator < (len(self.edge_matrix[0]) - 2)): # -2 not -1 because you inc. by 2 IW
+            print(iterator)
             self.draw_line(self.edge_matrix[0][iterator], self.edge_matrix[1][iterator], self.edge_matrix[0][iterator + 1], self.edge_matrix[1][iterator + 1], color)
             iterator = iterator + 2
 
@@ -167,12 +170,15 @@ def display_matrix(x):
 
 def multiply_matrices(x,y):
 #this function is meant to take in rectangular matrices and multiply them in order given
-    result = [len(y)][len(y[0])]
+    #Python doesn't generate matrices like this: result = [len(y)][len(y[0])] IW
+    result_matrix = [([0] * len(y[0])) for i in range(len(y))]#[len(y)][len(y[0])]
+    print(result_matrix)
     for i in range(len(x)):
         for j in range(len(y[0])):
             for k in range(len(y)):
                 result_matrix[i][j] += x[i][k] * y[k][j]
     display_matrix(result_matrix)
+    y = result_matrix #Alters the second matrix IW
     return result_matrix
 
 #TEST CODE BELOW
@@ -183,6 +189,7 @@ def multiply_matrices(x,y):
 
 n = picture('image', 500, 500)
 
+#TEST COORDINATES
 n.add_edge(50, 220, 0, 241, 300, 0)
 n.add_edge(220, 50, 0, 300, 241, 0)
 n.add_edge(241, 220, 0, 50, 300, 0)
@@ -194,8 +201,13 @@ n.add_edge(500, 500, 0, 0, 0, 0)
 n.add_edge(50, 50, 0, 250, 50, 0)
 n.add_edge(50, 250, 0, 50, 50, 0)
 
+# n.add_edge(50, 50, 0, 100, 50, 0)
+# n.add_edge(100, 50, 0, 100, 100, 0)
+# n.add_edge(100, 100, 0, 50, 100, 0)
+# n.add_edge(50, 100, 0, 350, 50, 0)
+
 n.draw_edges([100, 100, 100])
 
 ppm_save_ascii(n)
 
-multiply_matrices(four_identity, example_matrix)
+multiply_matrices(n.four_identity, example_matrix)
