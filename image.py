@@ -5,7 +5,7 @@ class picture:
     def __init__(self, n, w, h):
         self.name = n
         self.width, self.height = (w, h)
-        self.pixels = [[[255, 255, 255] for i in range(self.width)] for j in range(self.height)]
+        self.pixels = [[[0, 0, 0] for i in range(self.width)] for j in range(self.height)]
         self.four_identity = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]
         self.edge_matrix = [[], [], [], []]
 
@@ -94,7 +94,7 @@ class picture:
                     d-= B
                 #end octant 7 while
                 self.plot(x1, y1, color)
-                
+
     def display_edge_matrix(self):
         for i in self.edge_matrix:
             print(i)
@@ -112,8 +112,7 @@ class picture:
     def draw_edges(self, color):
         iterator = 0
         self.display_edge_matrix()
-        while (iterator < (len(self.edge_matrix[0]) - 2)): # -2 not -1 because you inc. by 2 IW
-            print(iterator)
+        while (iterator < (len(self.edge_matrix[0]) - 1)): # I was wrong, the original error was just you needed < instead of != to account for the overshoot. IW
             self.draw_line(self.edge_matrix[0][iterator], self.edge_matrix[1][iterator], self.edge_matrix[0][iterator + 1], self.edge_matrix[1][iterator + 1], color)
             iterator = iterator + 2
 
@@ -190,23 +189,43 @@ def multiply_matrices(x,y):
 n = picture('image', 500, 500)
 
 #TEST COORDINATES
-n.add_edge(50, 220, 0, 241, 300, 0)
-n.add_edge(220, 50, 0, 300, 241, 0)
-n.add_edge(241, 220, 0, 50, 300, 0)
-n.add_edge(300, 50, 0, 220, 241, 0)
-n.add_edge(0, 0, 0, 400, 400, 0)
-n.add_edge(500, 0, 0, 0, 500, 0)
-n.add_edge(0, 500, 0, 500, 0, 0)
-n.add_edge(500, 500, 0, 0, 0, 0)
-n.add_edge(50, 50, 0, 250, 50, 0)
-n.add_edge(50, 250, 0, 50, 50, 0)
+# n.add_edge(50, 220, 0, 241, 300, 0)
+# n.add_edge(220, 50, 0, 300, 241, 0)
+# n.add_edge(241, 220, 0, 50, 300, 0)
+# n.add_edge(300, 50, 0, 220, 241, 0)
+# n.add_edge(0, 0, 0, 400, 400, 0)
+# n.add_edge(500, 0, 0, 0, 500, 0)
+# n.add_edge(0, 500, 0, 500, 0, 0)
+# n.add_edge(500, 500, 0, 0, 0, 0)
+# n.add_edge(50, 50, 0, 250, 50, 0)
+# n.add_edge(50, 250, 0, 50, 50, 0)
 
-# n.add_edge(50, 50, 0, 100, 50, 0)
-# n.add_edge(100, 50, 0, 100, 100, 0)
-# n.add_edge(100, 100, 0, 50, 100, 0)
-# n.add_edge(50, 100, 0, 350, 50, 0)
+n.add_edge(50, 50, 0, 300, 50, 0)
+n.add_edge(300, 50, 0, 300, 200, 0)
+n.add_edge(300, 200, 0, 100, 200, 0)
+n.add_edge(100, 200, 0, 100, 400, 0)
+n.add_edge(100, 400, 0, 50, 400, 0)
+n.add_edge(50, 400, 0, 50, 50, 0)
 
-n.draw_edges([100, 100, 100])
+n.add_edge(100, 100, 0, 250, 100, 0)
+n.add_edge(250, 100, 0, 250, 150, 0)
+n.add_edge(250, 150, 0, 100, 150, 0)
+n.add_edge(100, 150, 0, 100, 100, 0)
+
+n.add_edge(250, 120, 0, 300, 120, 0)
+
+n.add_edge(150, 200, 0, 225, 300, 0)
+n.add_edge(150, 312, 0, 175, 350, 0)
+n.add_edge(225, 300, 0, 175, 350, 0)
+
+n.add_edge(175, 150, 0, 175, 100, 0)
+
+n.add_edge(100, 375, 0, 150, 375, 0)
+n.add_edge(150, 375, 0, 150, 200, 0)
+
+n.add_edge(100, 200, 0, 50, 200, 0)
+
+n.draw_edges([255, 255, 255])
 
 ppm_save_ascii(n)
 
